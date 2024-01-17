@@ -13,7 +13,7 @@ promise.then((res) => {
   console.log('第一个then失败了: ', err.toString());
   return 'fail'
 })
-/* .then((res) => {
+.then((res) => {
   console.log('第2个then成功了: ', res);
   return 'ok2'
 }, (err) => {
@@ -25,7 +25,7 @@ promise.then((res) => {
 }, (err) => {
   console.log('err: ', err);
   return 'fail3'
-}) */
+})
 
 console.log('end')
 

@@ -56,12 +56,12 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
         this.solveCbs.push(() => {
           res = onFulfilled(this.resolveValue);
           console.log('then-resolve-res: ', res);
-          // resolve(res);
+          resolve(res);
         })
         this.rejectCbs.push(() => {
           res = onRejected(this.rejectValue);
           console.log('then-reject-res: ', res);
-          // reject(res);
+          reject(res);
         })
       }
     });
