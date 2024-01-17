@@ -1,0 +1,12 @@
+{
+  "name": "ts-promise",
+  "version": "1.0.0",
+  "description": "Implementing Promise with TS",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src/ -e ts --exec ts-node ./src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
