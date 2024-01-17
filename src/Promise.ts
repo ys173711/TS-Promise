@@ -12,14 +12,13 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
     this.resolve = (value: any): any => {
       if (this.status !== 'pending') return; 
       this.status = 'fulfilled'; // 成功状态
-      value[10] = 100
       this.resolveValue = value;
     };
     this.reject = (err: any): any => {
       if (this.status !== 'pending') return;
       this.status = 'rejected'; // 失败状态
       this.rejectValue = err;
-      console.log('失败的: ', this.rejectValue);
+      console.log('执行失败: ', this.rejectValue);
     };
     
     try {
@@ -33,11 +32,16 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
   }
 
   then(onFulfilled: ResolveType, onRejected: RejectType) {
-    if (this.status === 'fulfilled') {
-      onFulfilled(this.resolveValue);
-    } else if (this.status === 'rejected') {
-      onRejected(this.rejectValue);
-    }
+    return new Promise((resolve, reject) => {
+      let res;
+      if (this.status === 'fulfilled') {
+        res = onFulfilled(this.resolveValue);
+        resolve(res);
+      } else if (this.status === 'rejected') {
+        res = onRejected(this.rejectValue);
+        reject(res);
+      }
+    });
   }
 }
 
