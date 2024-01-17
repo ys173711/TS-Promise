@@ -7,18 +7,29 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
   public status!: string
   public resolveValue!: any
   public rejectValue!: any
+  // 处理异步
+  private solveCbs: Array<()=>void> = []
+  private rejectCbs: Array<()=>void> = []
+
   constructor(executor: ExecutorType) {
-    this.status = 'pending'; // 默认状态，等待状态
+    this.status = 'pending'; // 初始状态，等待状态
     this.resolve = (value: any): any => {
+      console.log('执行resolve...')
       if (this.status !== 'pending') return; 
       this.status = 'fulfilled'; // 成功状态
       this.resolveValue = value;
+
+      // 处理异步
+      this.solveCbs.forEach(cb => cb())
     };
     this.reject = (err: any): any => {
       if (this.status !== 'pending') return;
       this.status = 'rejected'; // 失败状态
       this.rejectValue = err;
       console.log('执行失败: ', this.rejectValue);
+
+      // 处理异步
+      this.rejectCbs.forEach(cb => cb())
     };
     
     try {
@@ -32,6 +43,7 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
   }
 
   then(onFulfilled: ResolveType, onRejected: RejectType) {
+    console.log('进入then...')
     return new Promise((resolve, reject) => {
       let res;
       if (this.status === 'fulfilled') {
@@ -40,6 +52,17 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
       } else if (this.status === 'rejected') {
         res = onRejected(this.rejectValue);
         reject(res);
+      } else if (this.status === 'pending') { // 处理异步
+        this.solveCbs.push(() => {
+          res = onFulfilled(this.resolveValue);
+          console.log('then-resolve-res: ', res);
+          // resolve(res);
+        })
+        this.rejectCbs.push(() => {
+          res = onRejected(this.rejectValue);
+          console.log('then-reject-res: ', res);
+          // reject(res);
+        })
       }
     });
   }
