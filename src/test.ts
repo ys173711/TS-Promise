@@ -8,7 +8,7 @@ let promise = new Promise((resolve, reject) => {
 promise.then((res) => {
   console.log('resolveResult: ', res);
 }, (err) => {
-  console.log('rejectResult: ', err);
+  console.log('err: ', err.toString());
 });
 
 
