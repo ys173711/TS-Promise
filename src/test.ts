@@ -33,7 +33,6 @@ promise.then((res) => {
   return 'fail3'
 })
 
-console.log('end')
-
+console.log('end!')
 
 export {}
