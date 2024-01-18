@@ -82,6 +82,22 @@ class Promise<T=any> { // 一般类泛型和函数泛型都建议带上！
       }
     })
   } 
+
+  static all(promises: Promise[]): Promise {
+    return new Promise((resolve, reject) => {
+      const arr: any[] = [];
+      promises.forEach((promise, index) => {
+        promise.then(res => {
+          arr[index] = res; // 注意要用索引保存，不能用push
+          if(index === promises.length - 1) {
+            resolve(arr);
+          }
+        }, err => {
+          reject(err)
+        })
+      })
+    }) 
+  }
 }
 
 // 自定义守卫isPromise  Vue3源码片段
